@@ -52,6 +52,62 @@ Tempo total
 32h
 
 
+## Page layout
+
++--------------------------------------------+
+
+Header
+
++-----------+--------------------------------+
+
+Sidebar     Conteúdo (RouterOutlet)
+
++-----------+--------------------------------+
+
+
+## Estrutur final
+
+src/app
+
+core/
+│
+├── services/
+├── models/
+└── config/
+
+layout/
+│
+├── header/
+├── sidebar/
+└── page-layout/
+
+shared/
+│
+├── components/
+├── directives/
+└── pipes/
+
+features/
+│
+├── home/
+│   └── pages/
+│       └── home/
+│
+├── materias/
+│   └── pages/
+│       └── materias-list/
+│
+├── sessoes/
+│   └── pages/
+│       └── sessoes/
+│
+└── estatisticas/
+    └── pages/
+        └── estatisticas/
+
+app.component.*
+app.config.ts
+app.routes.ts
 
 # Roadmap
 
