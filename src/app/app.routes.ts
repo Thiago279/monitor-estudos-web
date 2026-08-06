@@ -1,34 +1,26 @@
 import { Routes } from '@angular/router';
 
-export const routes: Routes = [];
+import { HomeComponent } from './features/home/pages/home/home.component';
+import { MateriasListComponent } from './features/materias/pages/materias-list/materias-list.component';
+import { SessoesComponent } from './features/sessoes/pages/sessoes/sessoes.component';
+import { EstatisticasComponent } from './features/estatisticas/pages/estatisticas/estatisticas.component';
 
-/*
-/
+export const routes: Routes = [
 
-↓
-
-HomeComponent
-
-----------------
-
-/materias
-
-↓
-
-MateriasListComponent
-
-----------------
-
-/sessoes
-
-↓
-
-SessoesComponent
-
-----------------
-
-/estatisticas
-
-↓
-
-EstatisticasComponent*/
+    {
+    path: '',
+    component: HomeComponent
+    },
+    {
+        path: 'materias',
+        component: MateriasListComponent
+    },
+    {
+        path: 'sessoes',
+        component: SessoesComponent
+    },
+    {
+        path: 'estatisticas',
+        component: EstatisticasComponent
+    }
+];
