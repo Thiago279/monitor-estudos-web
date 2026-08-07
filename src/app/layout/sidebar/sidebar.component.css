@@ -13,10 +13,16 @@
 
 }
 
-.sidebar a{
+.sidebar a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  padding: 10px 12px;
+}
 
-    text-decoration:none;
-    color:#333;
-    font-weight:500;
-
+.active {
+  font-weight: bold;
+  color: #2563eb;
+  background-color: #e8f0fe;
+  border-radius: 6px;
 }

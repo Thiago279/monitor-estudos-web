@@ -1,11 +1,26 @@
 <nav class="sidebar">
+ <a
+   routerLink=""
+   routerLinkActive="active"
+   [routerLinkActiveOptions]="{ exact: true }">
+   Home
+ </a>
 
-  <a routerLink="">Home</a>
+ <a
+   routerLink="/materias"
+   routerLinkActive="active">
+   Matérias
+ </a>
 
-  <a routerLink="/materias">Matérias</a>
+ <a
+   routerLink="/sessoes"
+   routerLinkActive="active">
+   Sessões
+ </a>
 
-  <a routerLink="/sessoes">Sessões</a>
-
-  <a routerLink="/estatisticas">Estatísticas</a>
-
+ <a 
+   routerLink="/estatisticas"
+   routerLinkActive="active">
+   Estatísticas
+ </a>
 </nav>
