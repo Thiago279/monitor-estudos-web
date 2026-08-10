@@ -1,1 +1,11 @@
-<p>materias-list works!</p>
+<h2>Matérias Cadastradas</h2>
+
+<ul>
+    @for (materia of materias; track materia.id) {
+    <li>
+        <strong>{{ materia.titulo }}</strong> - Cor: {{ materia.cor }}
+    </li>
+    } @empty {
+    <p>Nenhuma matéria encontrada.</p>
+    }
+</ul>
