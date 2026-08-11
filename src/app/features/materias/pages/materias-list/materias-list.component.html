@@ -1,11 +1,55 @@
 <h2>Matérias Cadastradas</h2>
 
-<ul>
+<!-- Feedbacks Visuais -->
+@if (mensagemSucesso) {
+  <p style="color: green;">{{ mensagemSucesso }}</p>
+}
+
+@if (mensagemErro) {
+  <p style="color: red;">{{ mensagemErro }}</p>
+}
+
+<!-- Listagem -->
+@if (carregando && materias.length === 0) {
+  <p>Carregando matérias...</p>
+} @else {
+  <ul>
     @for (materia of materias; track materia.id) {
-    <li>
+      <li>
         <strong>{{ materia.titulo }}</strong> - Cor: {{ materia.cor }}
-    </li>
+        
+        <button (click)="prepararEdicao(materia)" [disabled]="carregando">Editar</button>
+        <button (click)="deletar(materia.id)" [disabled]="carregando">Excluir</button>
+      </li>
     } @empty {
-    <p>Nenhuma matéria encontrada.</p>
+      <p>Nenhuma matéria encontrada.</p>
     }
-</ul>
+  </ul>
+}
+
+<hr>
+
+<!-- Formulário Dinâmico (Criação / Edição) -->
+<h3>{{ materiaEditandoId ? 'Editar Matéria' : 'Nova Matéria' }}</h3>
+
+<form [formGroup]="materiaForm" (ngSubmit)="salvar()">
+    <div>
+        <label for="titulo">Título:</label>
+        <input id="titulo" formControlName="titulo" placeholder="Ex: Algoritmos">
+    </div>
+
+    <div>
+        <label for="cor">Cor:</label>
+        <input id="cor" formControlName="cor" placeholder="Ex: #FF0000">
+    </div>
+
+    <button type="submit" [disabled]="materiaForm.invalid || carregando">
+      {{ materiaEditandoId ? 'Atualizar Matéria' : 'Adicionar Matéria' }}
+    </button>
+
+    @if (materiaEditandoId) {
+      <button type="button" (click)="cancelarEdicao()" [disabled]="carregando">
+        Cancelar Edição
+      </button>
+    }
+</form>

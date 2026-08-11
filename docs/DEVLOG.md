@@ -66,6 +66,8 @@ src/app/
 - CORS configured in springboot.
 - Rendered dynamic `materias` list in component template using control flow.
 - Built interactive creation form for `materias` using Angular Reactive Forms.
+- Implemented UI request state management (`carregando`, `mensagemSucesso`, and `mensagemErro`).
+- Implemented reactive `DELETE` operation removing items from state without page reload.
 
 ## Notes
 - Integrated Standalone Component with backend endpoint `http://localhost:8080/monitor-estudos/materias`.
@@ -77,6 +79,8 @@ src/app/
 - Implemented `ReactiveFormsModule` with `FormGroup`, `FormControl`, and `Validators` (`required`, `minLength(3)`).
 - Bound HTML form using `[formGroup]`, `formControlName`, and `(ngSubmit)` event handling.
 - Leveraged TypeScript utility type `Omit<Materia, 'id'>` in `MateriaService` to decouple request payload structure from response entities.
+- Managed user feedback and button states dynamically using component state properties (`carregando`, `mensagemErro`, `mensagemSucesso`).
+- Handled HTTP 204 No Content responses from `DELETE` requests using RxJS `.filter()` for array manipulation in local memory state.
 
 ## Problems
 
