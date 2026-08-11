@@ -65,6 +65,7 @@ src/app/
 - Implemented Angular HttpClient integration to consume backend API.
 - CORS configured in springboot.
 - Rendered dynamic `materias` list in component template using control flow.
+- Built interactive creation form for `materias` using Angular Reactive Forms.
 
 ## Notes
 - Integrated Standalone Component with backend endpoint `http://localhost:8080/monitor-estudos/materias`.
@@ -73,6 +74,9 @@ src/app/
   - `MateriaService` encapsulating HTTP requests via `HttpClient`.
 - Utilized Angular 17+ control flow syntax (`@for` with `track materia.id` and `@empty`) in `materias-list.component.html`.
 - Subscribed to `Observable` in `ngOnInit` lifecycle hook to store API response in component state.
+- Implemented `ReactiveFormsModule` with `FormGroup`, `FormControl`, and `Validators` (`required`, `minLength(3)`).
+- Bound HTML form using `[formGroup]`, `formControlName`, and `(ngSubmit)` event handling.
+- Leveraged TypeScript utility type `Omit<Materia, 'id'>` in `MateriaService` to decouple request payload structure from response entities.
 
 ## Problems
 
