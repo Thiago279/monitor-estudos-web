@@ -26,9 +26,7 @@ export class MateriasListComponent {
   });
 
   ngOnInit(): void {
-    this.carregando = true;
-    this.mensagemErro = null;
-    this.mensagemSucesso = null;
+    this.iniciarRequisicao();
 
     this.materiaService.obterTodas().subscribe({
       next: (dados) => {
@@ -102,9 +100,7 @@ export class MateriasListComponent {
   }
 
   deletar(id: number): void{
-    this.carregando = true;
-    this.mensagemErro = null;
-    this.mensagemSucesso = null;
+    this.iniciarRequisicao();
 
     this.materiaService.deletarMateria(id).subscribe({
       next: () => {
