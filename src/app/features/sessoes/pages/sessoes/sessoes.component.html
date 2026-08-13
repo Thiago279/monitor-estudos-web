@@ -1,1 +1,87 @@
-<p>sessoes works!</p>
+<h2>Sessões de Estudo</h2>
+
+<!-- Feedbacks Visuais Reativos -->
+@if (mensagemSucesso) {
+  <p class="feedback-sucesso">{{ mensagemSucesso }}</p>
+}
+
+@if (mensagemErro) {
+  <p class="feedback-erro">{{ mensagemErro }}</p>
+}
+
+@if (carregando && sessoes.length === 0) {
+  <p class="feedback-carregando">Carregando dados de sessão...</p>
+}
+
+<!-- 1. CARD DE SESSÃO EM ANDAMENTO -->
+@if (emAndamento) {
+  <div class="card card-em-andamento">
+    <span class="badge badge-andamento">⏱️ EM ANDAMENTO</span>
+    <h3>{{ emAndamento.materiaTitulo }}</h3>
+    <p>Iniciada em: <strong>{{ emAndamento.dataInicio | date:'dd/MM/yyyy HH:mm:ss' }}</strong></p>
+  </div>
+}
+
+<!-- CARD: REGISTRAR SESSÃO ANTIGA -->
+<div class="card card-registro">
+  <h3>➕ Registrar Estudo Anterior</h3>
+  <p class="descricao">Registrou horas de estudo offline? Adicione o histórico manualmente aqui.</p>
+
+  <form [formGroup]="sessaoManualForm" (ngSubmit)="cadastrarSessaoManual()">
+    <div class="form-group">
+      <label for="materia">Matéria:</label>
+      <select id="materia" formControlName="materiaId">
+        <option [ngValue]="null" disabled>-- Selecione uma matéria --</option>
+        @for (materia of materias; track materia.id) {
+          <option [value]="materia.id">{{ materia.titulo }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="dataInicio">Início do Estudo:</label>
+      <input id="dataInicio" type="datetime-local" formControlName="dataInicio">
+    </div>
+
+    <div class="form-group">
+      <label for="dataFim">Término do Estudo:</label>
+      <input id="dataFim" type="datetime-local" formControlName="dataFim">
+    </div>
+
+    <button type="submit" [disabled]="sessaoManualForm.invalid || carregando">
+      Registrar Sessão
+    </button>
+  </form>
+</div>
+<hr class="divisor">
+
+<!-- 3. HISTÓRICO DE SESSÕES -->
+<h3>Histórico Concluído</h3>
+
+@if (sessoes.length === 0) {
+  <p>Nenhuma sessão registrada até o momento.</p>
+} @else {
+  <div class="lista-cards">
+    @for (sessao of sessoes; track sessao.id) {
+      <div class="card card-item">
+        <div class="card-info">
+          <h4>{{ sessao.materiaTitulo }}</h4>
+          <span class="data">
+            📅 {{ sessao.dataInicio | date:'dd/MM/yyyy HH:mm' }} 
+            @if (sessao.dataFim) {
+              até {{ sessao.dataFim | date:'HH:mm' }}
+            }
+          </span>
+        </div>
+
+        <div class="card-status">
+          @if (sessao.dataFim) {
+            <span class="badge badge-concluida">Concluída</span>
+          } @else {
+            <span class="badge badge-andamento">Em Andamento</span>
+          }
+        </div>
+      </div>
+    }
+  </div>
+}
