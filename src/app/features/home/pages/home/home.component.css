@@ -1,0 +1,211 @@
+/* ==========================================================================
+   CONTAINER E ESTRUTURA GERAL
+   ========================================================================== */
+.coluna-esquerda {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 480px;
+  padding: 10px;
+}
+
+/* ==========================================================================
+   FEEDBACKS (MENSAGENS DO SISTEMA)
+   ========================================================================== */
+.feedback-sucesso {
+  color: #155724;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  margin: 0;
+}
+
+.feedback-erro {
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* ==========================================================================
+   CARD: SESSÃO EM ANDAMENTO (CRONÔMETRO ATIVO)
+   ========================================================================== */
+.card-em-andamento {
+  border: 2px solid #3b82f6;
+  background-color: #eff6ff;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.badge-andamento {
+  background-color: #3b82f6;
+  color: #ffffff;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.card-em-andamento h3 {
+  margin: 8px 0;
+  font-size: 20px;
+  color: #1e3a8a;
+}
+
+.timer-display {
+  font-size: 40px;
+  font-weight: 700;
+  font-family: 'Courier New', Courier, monospace;
+  color: #2563eb;
+  margin: 12px 0 16px 0;
+  letter-spacing: 2px;
+}
+
+.btn-finalizar {
+  background-color: #ef4444;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  width: 100%;
+}
+
+.btn-finalizar:hover {
+  background-color: #dc2626;
+}
+
+/* ==========================================================================
+   FORMULÁRIO INICIAR ESTUDO (QUANDO NÃO HÁ SESSÃO ATIVA)
+   ========================================================================== */
+.card-iniciar-direto {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.form-acoes {
+  display: flex;
+  gap: 10px;
+}
+
+.form-acoes select {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  background-color: #ffffff;
+  font-size: 14px;
+  color: #334155;
+  outline: none;
+}
+
+.form-acoes select:focus {
+  border-color: #3b82f6;
+}
+
+.btn-iniciar {
+  background-color: #10b981;
+  color: #ffffff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-iniciar:hover {
+  background-color: #059669;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   PAINEL DIÁRIO: LISTAGEM DE MATÉRIAS/TEMPOS DO DIA
+   ========================================================================== */
+.painel-diario {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.painel-header {
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 6px;
+}
+
+.data-titulo {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.lista-materias-dia {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.item-materia-dia {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+}
+
+.materia-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Pílula vertical colorida */
+.pilula-cor {
+  width: 6px;
+  height: 20px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.nome-materia {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.tempo-duracao {
+  font-size: 15px;
+  font-family: monospace;
+  font-weight: 600;
+  color: #475569;
+}
+
+.sem-sessoes {
+  color: #94a3b8;
+  font-size: 14px;
+  font-style: italic;
+  margin: 4px 0;
+}

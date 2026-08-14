@@ -19,7 +19,11 @@ export class SessaoEstudoService {
     return this.http.post<SessaoEstudoResponse>(this.apiUrl, request);
   }
 
-  finalizarSessao(id: number, request: SessaoEstudoRequest): Observable<SessaoEstudoResponse> {
+  editarSessao(id: number, request: SessaoEstudoRequest): Observable<SessaoEstudoResponse> {
     return this.http.put<SessaoEstudoResponse>(`${this.apiUrl}/${id}`, request);
+  }
+
+  finalizarSessao(id: number): Observable<SessaoEstudoResponse> {
+    return this.http.patch<SessaoEstudoResponse>(`${this.apiUrl}/${id}/finalizar`, null);
   }
 }
