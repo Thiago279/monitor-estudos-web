@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'; 
 import { CommonModule, DatePipe } from '@angular/common';
 import { Materia } from '../../../materias/models/materia.model';
@@ -47,6 +47,10 @@ export class HomeComponent {
 
   ngOnInit(): void {
     this.carregarDadosIniciais();
+  }
+
+  ngOnDestroy(): void {
+    this.pararTimer();
   }
 
   private carregarDadosIniciais(): void {
@@ -163,6 +167,18 @@ export class HomeComponent {
 
     return `${h}:${m}:${s}`;
   }
+
+  formatarTempoTotal(minutosTotais: number): string {
+  if (!minutosTotais || minutosTotais <= 0) return '0 min';
+  
+  const horas = Math.floor(minutosTotais / 60);
+  const minutos = minutosTotais % 60;
+
+  if (horas === 0) {
+    return `${minutos}M`;
+  }
+  return `${horas}H ${minutos > 0 ? minutos + 'M' : ''}`.trim();
+}
 
   // Gera a string "YYYY-MM-DDTHH:mm:ss" no horário local da máquina
 private obterDataHoraLocalISO(): string {

@@ -1,75 +1,108 @@
-<div class="coluna-esquerda">
+<div class="dashboard-layout">
 
-  <!-- 1. Feedbacks -->
-  @if (mensagemSucesso) {
-    <p class="feedback-sucesso">{{ mensagemSucesso }}</p>
-  }
-  @if (mensagemErro) {
-    <p class="feedback-erro">{{ mensagemErro }}</p>
-  }
+  <!-- ==================== COLUNA ESQUERDA ==================== -->
+  <div class="coluna-esquerda">
 
-  <!-- 2. Card de Sessão Ativa (Só aparece se houver sessão rodando) -->
-  @if (emAndamento) {
-    <div class="card card-em-andamento">
-      <span class="badge badge-andamento">⏱️ ESTUDANDO AGORA</span>
-      <h3>{{ emAndamento.materiaTitulo }}</h3>
-      <div class="timer-display">{{ tempoFormatado }}</div>
-      <button 
-        type="button" 
-        class="btn-finalizar" 
-        (click)="finalizarSessao()" 
-        [disabled]="carregando">
-        ⏹️ Finalizar Sessão
-      </button>
-    </div>
-  }
+    <!-- Feedbacks -->
+    @if (mensagemSucesso) {
+      <p class="feedback-sucesso">{{ mensagemSucesso }}</p>
+    }
+    @if (mensagemErro) {
+      <p class="feedback-erro">{{ mensagemErro }}</p>
+    }
 
-  <!-- 3. Painel Diário -->
-  <div class="painel-diario">
-    <div class="painel-header">
-      <h3 class="data-titulo">
-        {{ estatisticaDiaria?.data ? (estatisticaDiaria?.data | date:'EEE, dd/MM/yyyy':'':'pt-BR') : 'Hoje' }}
-      </h3>
-    </div>
+    <!-- Sessão Ativa -->
+    @if (emAndamento) {
+      <div class="card card-em-andamento">
+        <span class="badge badge-andamento">⏱️ ESTUDANDO AGORA</span>
+        <h3>{{ emAndamento.materiaTitulo }}</h3>
+        <div class="timer-display">{{ tempoFormatado }}</div>
+        <button 
+          type="button" 
+          class="btn-finalizar" 
+          (click)="finalizarSessao()" 
+          [disabled]="carregando">
+          ⏹️ Finalizar Sessão
+        </button>
+      </div>
+    }
 
-    <!-- Lista de Sessões do Dia -->
-    <div class="lista-materias-dia">
-      @for (item of estatisticaDiaria?.sessoes; track item.sessaoId) {
-        <div class="item-materia-dia">
-          <div class="materia-info">
-            <span class="pilula-cor" [style.background-color]="item.materiaCorHex"></span>
-            <span class="nome-materia">{{ item.materiaTitulo }}</span>
+    <!-- Iniciar Nova Sessão (quando ocioso) -->
+    @if (!emAndamento) {
+      <div class="card-iniciar-direto">
+        <div class="form-acoes">
+          <select id="selectMateria" [formControl]="materiaControl">
+            <option [ngValue]="null" disabled>-- Escolha a matéria --</option>
+            @for (materia of materias; track materia.id) {
+              <option [value]="materia.id">{{ materia.titulo }}</option>
+            }
+          </select>
+          
+          <button 
+            type="button" 
+            class="btn-iniciar" 
+            (click)="iniciarNovaSessao()" 
+            [disabled]="materiaControl.invalid || carregando">
+            ▶️ Iniciar Estudo
+          </button>
+        </div>
+      </div>
+    }
+
+    <!-- Resumo Diário por Matéria -->
+    <div class="painel-diario">
+      <div class="painel-header">
+        <h3 class="data-titulo">
+          {{ estatisticaDiaria?.data ? (estatisticaDiaria?.data | date:'EEE, dd/MM/yyyy':'':'pt-BR') : 'Hoje' }}
+        </h3>
+      </div>
+
+      <div class="lista-materias-dia">
+        @for (item of estatisticaDiaria?.sessoes; track item.sessaoId) {
+          <div class="item-materia-dia">
+            <div class="materia-info">
+              <span class="pilula-cor" [style.background-color]="item.materiaCorHex"></span>
+              <span class="nome-materia">{{ item.materiaTitulo }}</span>
+            </div>
+            <span class="tempo-duracao">{{ item.duracaoMinutos }} min</span>
           </div>
-          <span class="tempo-duracao">{{ item.duracaoMinutos }} min</span>
+        } @empty {
+          <p class="sem-sessoes">Nenhum estudo registrado hoje ainda.</p>
+        }
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ==================== COLUNA DIREITA (DADOS BRUTOS) ==================== -->
+  <div class="coluna-direita">
+    
+    <!-- Total Acumulado do Dia -->
+    <div class="card-total-dia">
+      <span class="label-total">Tempo Total de Hoje</span>
+      <h2 class="valor-total">
+        {{ formatarTempoTotal(estatisticaDiaria?.tempoTotalMinutos || 0) }}
+      </h2>
+    </div>
+
+    <!-- Registro Bruto de Intervalos (Pronto para o futuro gráfico) -->
+    <div class="painel-intervalos">
+      <h4>Intervalos Registrados</h4>
+      
+      @for (sessao of estatisticaDiaria?.sessoes; track sessao.sessaoId) {
+        <div class="item-intervalo">
+          <span class="intervalo-horario">
+            {{ sessao.horaInicio }} ➔ {{ sessao.horaFim || 'Em andamento' }}
+          </span>
+          <span class="intervalo-materia" [style.color]="sessao.materiaCorHex">
+            {{ sessao.materiaTitulo }} ({{ sessao.duracaoMinutos }}m)
+          </span>
         </div>
       } @empty {
-        <p class="sem-sessoes">Nenhum estudo registrado hoje ainda.</p>
+        <p class="sem-sessoes">Sem blocos de horários hoje.</p>
       }
-
-      <!-- 4. Botão + Estudo / Formulário Expansível (Só se não houver sessão ativa) -->
-      <!-- Se NÃO houver sessão em andamento, o seletor já fica pronto para uso -->
-        @if (!emAndamento) {
-        <div class="card-iniciar-direto">
-            <div class="form-acoes">
-            <select id="selectMateria" [formControl]="materiaControl">
-                <option [ngValue]="null" disabled>-- Escolha a matéria --</option>
-                @for (materia of materias; track materia.id) {
-                <option [value]="materia.id">{{ materia.titulo }}</option>
-                }
-            </select>
-            
-            <button 
-                type="button" 
-                class="btn-iniciar" 
-                (click)="iniciarNovaSessao()" 
-                [disabled]="materiaControl.invalid || carregando">
-                ▶️ Iniciar Estudo
-            </button>
-            </div>
-        </div>
-    }
-      
     </div>
+
   </div>
 
 </div>
