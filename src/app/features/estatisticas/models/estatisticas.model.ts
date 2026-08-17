@@ -14,3 +14,32 @@ export interface EstatisticaDiariaResponse {
   tempoTotalMinutos: number;
   sessoes: SessaoResumoResponse[];
 }
+
+export interface MateriaTempoResponse{
+  materiaId: number,
+  materiaTitulo: string,
+  tempoAcumuladoMinutos: number,
+  materiaCorHex: string
+}
+
+export interface EstatisticasPeriodoResponse {
+  dataInicio: string;    
+  dataFim: string | null;
+  tempoTotalMinutos: number;
+  quantidadeSessoes: number;
+  materias: MateriaTempoResponse[]; 
+}
+
+export interface DiaSemanaResponse {
+  data: string;    
+  diaSemana: string;
+  tempoTotalMinutos: number;
+  materias: MateriaTempoResponse[]; 
+}
+
+export interface EstatisticasSemanalResponse {
+  dataInicio: string;    
+  dataFim: string;
+  tempoTotalMinutos: number;
+  dias: DiaSemanaResponse[]; 
+}
