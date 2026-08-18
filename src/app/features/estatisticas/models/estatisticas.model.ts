@@ -22,7 +22,7 @@ export interface MateriaTempoResponse{
   materiaCorHex: string
 }
 
-export interface EstatisticasPeriodoResponse {
+export interface EstatisticaPeriodoResponse {
   dataInicio: string;    
   dataFim: string | null;
   tempoTotalMinutos: number;
@@ -37,7 +37,7 @@ export interface DiaSemanaResponse {
   materias: MateriaTempoResponse[]; 
 }
 
-export interface EstatisticasSemanalResponse {
+export interface EstatisticaSemanalResponse {
   dataInicio: string;    
   dataFim: string;
   tempoTotalMinutos: number;

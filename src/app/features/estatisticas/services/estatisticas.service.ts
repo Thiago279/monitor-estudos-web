@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { EstatisticaDiariaResponse, EstatisticasSemanalResponse,EstatisticasPeriodoResponse } from '../models/estatisticas.model';
+import { EstatisticaDiariaResponse, EstatisticaSemanalResponse,EstatisticaPeriodoResponse } from '../models/estatisticas.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,20 +20,20 @@ export class EstatisticaService {
     return this.http.get<EstatisticaDiariaResponse>(`${this.apiUrl}/diaria`,{params});
   }
 
-  obterEstatisticaSemanal(data?:string) : Observable<EstatisticasSemanalResponse> {
+  obterEstatisticaSemanal(data?:string) : Observable<EstatisticaSemanalResponse> {
     let params = new HttpParams();
     if (data) {
       params = params.set('data', data);
     }
-    return this.http.get<EstatisticasSemanalResponse>(`${this.apiUrl}/semanal`,{params})
+    return this.http.get<EstatisticaSemanalResponse>(`${this.apiUrl}/semanal`,{params})
   }
 
-  obterEstatisticaPeriodo(inicio:string, fim?:string) : Observable<EstatisticasPeriodoResponse> {
+  obterEstatisticaPeriodo(inicio:string, fim?:string) : Observable<EstatisticaPeriodoResponse> {
     let params = new HttpParams();
     params = params.set('inicio', inicio)
     if (fim) {
       params = params.set('fim', fim);
     }
-    return this.http.get<EstatisticasPeriodoResponse>(`${this.apiUrl}/periodo`,{params})
+    return this.http.get<EstatisticaPeriodoResponse>(`${this.apiUrl}/periodo`,{params})
   }
 }
