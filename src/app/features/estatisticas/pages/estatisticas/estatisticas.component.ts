@@ -4,10 +4,11 @@ import { EstatisticaDiariaResponse, EstatisticaSemanalResponse, EstatisticaPerio
 import { GraficoSemanalComponent } from '../../components/grafico-semanal/grafico-semanal.component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { GraficoPeriodoComponent } from '../../components/grafico-periodo/grafico-periodo.component';
 
 @Component({
   selector: 'app-estatisticas',
-  imports: [FormsModule, CommonModule, GraficoSemanalComponent],
+  imports: [FormsModule, CommonModule, GraficoSemanalComponent, GraficoPeriodoComponent],
   templateUrl: './estatisticas.component.html',
   styleUrl: './estatisticas.component.css'
 })

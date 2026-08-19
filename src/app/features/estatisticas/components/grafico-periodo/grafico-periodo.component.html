@@ -1,0 +1,16 @@
+<div class="toggle-container">
+  <button 
+    type="button" 
+    [class.ativo]="tipoGrafico === 'barras'" 
+    (click)="alternarTipo('barras')">
+    Barras
+  </button>
+  <button 
+    type="button" 
+    [class.ativo]="tipoGrafico === 'pizza'" 
+    (click)="alternarTipo('pizza')">
+    Pizza
+  </button>
+</div>
+
+<div echarts [options]="chartOptions" class="chart-container"></div>

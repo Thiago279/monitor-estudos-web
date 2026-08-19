@@ -68,6 +68,7 @@
 <div class="estatistica-periodo">
     <h3>Estatística por Período</h3>
     @if (estatisticaPeriodo) {
+    <app-grafico-periodo [materias]="estatisticaPeriodo.materias"></app-grafico-periodo>
     <p>Período: {{estatisticaPeriodo.dataInicio}} - {{estatisticaPeriodo.dataFim}}</p>
     <p>Total de Horas Estudadas: {{ formatarDuracao(estatisticaPeriodo.tempoTotalMinutos )}}</p>
     <p>Total de Sessões: {{ estatisticaPeriodo.quantidadeSessoes}}</p>
