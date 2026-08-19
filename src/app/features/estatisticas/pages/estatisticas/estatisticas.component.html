@@ -1,92 +1,82 @@
-
 @if (mensagemErro) {
-    <p class="feedback-erro">{{ mensagemErro }}</p>
+<p class="feedback-erro">{{ mensagemErro }}</p>
 }
 
 <div class="tabs-container">
-  <button 
-    type="button" 
-    (click)="trocarVisualizacao('DIARIA')"
-    [class.active]="tipoVisualizacao === 'DIARIA'">
-    Diário
-  </button>
+    <button type="button" (click)="trocarVisualizacao('DIARIA')" [class.active]="tipoVisualizacao === 'DIARIA'">
+        Diário
+    </button>
 
-  <button 
-    type="button" 
-    (click)="trocarVisualizacao('SEMANAL')"
-    [class.active]="tipoVisualizacao === 'SEMANAL'">
-    Semanal
-  </button>
+    <button type="button" (click)="trocarVisualizacao('SEMANAL')" [class.active]="tipoVisualizacao === 'SEMANAL'">
+        Semanal
+    </button>
 
-  <button 
-    type="button" 
-    (click)="trocarVisualizacao('PERIODO')"
-    [class.active]="tipoVisualizacao === 'PERIODO'">
-    Por Período
-  </button>
+    <button type="button" (click)="trocarVisualizacao('PERIODO')" [class.active]="tipoVisualizacao === 'PERIODO'">
+        Por Período
+    </button>
 </div>
 
 @if(tipoVisualizacao === 'DIARIA') {
-  <div class="estatistica-diaria">
+<div class="estatistica-diaria">
     <h3>Estatística Diária</h3>
     @if (estatisticaDiaria) {
-      <p>Total de Horas Estudadas: {{ formatarDuracao(estatisticaDiaria.tempoTotalMinutos)}}</p>
-      <p>Total de Sessões: {{ estatisticaDiaria.sessoes.length }}</p>
-      <ul>
+    <p>Total de Horas Estudadas: {{ formatarDuracao(estatisticaDiaria.tempoTotalMinutos)}}</p>
+    <p>Total de Sessões: {{ estatisticaDiaria.sessoes.length }}</p>
+    <ul>
         @for (sessao of estatisticaDiaria.sessoes; track sessao.sessaoId) {
-          <li>
-            {{ sessao.materiaTitulo }} - {{ sessao.duracaoMinutos }} minutos
-          </li>
+        <li>
+            {{ sessao.materiaTitulo }} - {{ formatarDuracao(sessao.duracaoMinutos )}} 
+        </li>
         }
-      </ul>
+    </ul>
     } @else {
-      <p>Nenhum estudo registrado neste dia.</p>
+    <p>Nenhum estudo registrado neste dia.</p>
     }
-  </div>
+</div>
 }
 @else if (tipoVisualizacao === 'SEMANAL') {
 <div class="estatistica-semanal">
     <h3>Estatística Semanal</h3>
     @if (estatisticaSemanal) {
-      <p>Semana: {{estatisticaSemanal.dataInicio}} - {{estatisticaSemanal.dataFim}}</p>
-      <p>Total de Horas Estudadas: {{ formatarDuracao(estatisticaSemanal.tempoTotalMinutos )}}</p>
-      <p>Dias: {{ estatisticaSemanal.dias.length }}</p>
-      <ul>
+    <p>Semana: {{estatisticaSemanal.dataInicio}} - {{estatisticaSemanal.dataFim}}</p>
+    <p>Total de Horas Estudadas: {{ formatarDuracao(estatisticaSemanal.tempoTotalMinutos )}}</p>
+    <p>Dias: {{ estatisticaSemanal.dias.length }}</p>
+    <ul>
         @for (dia of estatisticaSemanal.dias; track dia.data) {
-            <li>
-            <strong>{{ dia.diaSemana }} ({{ dia.data }}):</strong> {{ dia.tempoTotalMinutos }} min
+        <li>
+            <strong>{{ dia.diaSemana }} ({{ dia.data }}):</strong> {{ formatarDuracao(dia.tempoTotalMinutos )}} 
             @if (dia.materias.length > 0) {
-                <ul>
-                    @for (materia of dia.materias; track materia.materiaId) {
-                    <li>{{ materia.materiaTitulo }} - {{ materia.tempoAcumuladoMinutos }} min</li>
-                    }
-                </ul>
+            <ul>
+                @for (materia of dia.materias; track materia.materiaId) {
+                <li>{{ materia.materiaTitulo }} - {{ formatarDuracao(materia.tempoAcumuladoMinutos )}} </li>
+                }
+            </ul>
             }@else {
-                <p>Nenhuma estatística diária disponível.</p>
+            <p>Nenhuma estatística diária disponível.</p>
             }
-            </li>
+        </li>
         }
-      </ul>
-    } 
+    </ul>
+    }
 </div>
 
 } @else {
-    <input type = "date" [(ngModel)]="dataInicio" placeholder="Data Início">
-    <input type = "date" [(ngModel)]="dataFim" placeholder="Data Fim">
-    <button (click)="carregarEstatisticaPeriodo()">Carregar Estatística</button>
-    <div class="estatistica-periodo">
-        <h3>Estatística por Período</h3>
-        @if (estatisticaPeriodo) {
-            <p>Período: {{estatisticaPeriodo.dataInicio}} - {{estatisticaPeriodo.dataFim}}</p>
-            <p>Total de Horas Estudadas: {{ estatisticaPeriodo.tempoTotalMinutos }}</p>
-            <p>Total de Sessões: {{ estatisticaPeriodo.quantidadeSessoes}}</p>
-            <ul>
-                @for (materia of estatisticaPeriodo.materias; track materia.materiaId) {
-                    <li>{{ materia.materiaTitulo }} - {{ materia.tempoAcumuladoMinutos }} min</li>
-                }
-           </ul>
-        } @else {
-            <p>Nenhuma estatística disponível para o período selecionado.</p>
+<input type="date" [(ngModel)]="dataInicio" placeholder="Data Início">
+<input type="date" [(ngModel)]="dataFim" placeholder="Data Fim">
+<button (click)="carregarEstatisticaPeriodo()">Carregar Estatística</button>
+<div class="estatistica-periodo">
+    <h3>Estatística por Período</h3>
+    @if (estatisticaPeriodo) {
+    <p>Período: {{estatisticaPeriodo.dataInicio}} - {{estatisticaPeriodo.dataFim}}</p>
+    <p>Total de Horas Estudadas: {{ formatarDuracao(estatisticaPeriodo.tempoTotalMinutos )}}</p>
+    <p>Total de Sessões: {{ estatisticaPeriodo.quantidadeSessoes}}</p>
+    <ul>
+        @for (materia of estatisticaPeriodo.materias; track materia.materiaId) {
+        <li>{{ materia.materiaTitulo }} - {{ formatarDuracao(materia.tempoAcumuladoMinutos )}} min</li>
         }
-    </div>
+    </ul>
+    } @else {
+    <p>Nenhuma estatística disponível para o período selecionado.</p>
+    }
+</div>
 }

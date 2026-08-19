@@ -68,6 +68,11 @@ export class EstatisticasComponent {
       return;
     }
 
+    if(this.dataFim && this.dataFim < this.dataInicio) {
+      this.mensagemErro = 'A data de fim não pode ser anterior à data de início.';
+      return;
+    }
+
     this.iniciarRequisicao();
 
     this.estatisticaService.obterEstatisticaPeriodo(this.dataInicio, this.dataFim || undefined).subscribe({
