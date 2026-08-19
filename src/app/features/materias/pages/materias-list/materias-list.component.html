@@ -17,6 +17,11 @@
     @for (materia of materias; track materia.id) {
       <li>
         <strong>{{ materia.titulo }}</strong> - Cor: {{ materia.cor }}
+        <span 
+            class="badge-cor" 
+            [style.background-color]="materia.cor"
+            [title]="materia.cor">
+        </span>
         
         <button (click)="prepararEdicao(materia)" [disabled]="carregando">Editar</button>
         <button (click)="deletar(materia.id)" [disabled]="carregando">Excluir</button>
@@ -42,6 +47,7 @@
         <label for="cor">Cor:</label>
         <input id="cor" formControlName="cor" placeholder="Ex: #FF0000">
     </div>
+    
 
     <button type="submit" [disabled]="materiaForm.invalid || carregando">
       {{ materiaEditandoId ? 'Atualizar Matéria' : 'Adicionar Matéria' }}

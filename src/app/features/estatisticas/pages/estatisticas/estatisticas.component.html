@@ -38,6 +38,7 @@
 <div class="estatistica-semanal">
     <h3>Estatística Semanal</h3>
     @if (estatisticaSemanal) {
+        <app-grafico-semanal [dias]="estatisticaSemanal.dias"></app-grafico-semanal>
     <p>Semana: {{estatisticaSemanal.dataInicio}} - {{estatisticaSemanal.dataFim}}</p>
     <p>Total de Horas Estudadas: {{ formatarDuracao(estatisticaSemanal.tempoTotalMinutos )}}</p>
     <p>Dias: {{ estatisticaSemanal.dias.length }}</p>

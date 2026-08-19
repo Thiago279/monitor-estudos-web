@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { EstatisticaService } from '../../services/estatisticas.service';
 import { EstatisticaDiariaResponse, EstatisticaSemanalResponse, EstatisticaPeriodoResponse } from '../../models/estatisticas.model';
+import { GraficoSemanalComponent } from '../../components/grafico-semanal/grafico-semanal.component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-estatisticas',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, GraficoSemanalComponent],
   templateUrl: './estatisticas.component.html',
   styleUrl: './estatisticas.component.css'
 })
