@@ -22,7 +22,7 @@ export class MateriasListComponent {
 
   materiaForm: FormGroup = new FormGroup({
     titulo: new FormControl('', [Validators.required, Validators.minLength(3)]),
-    cor: new FormControl('')
+    cor: new FormControl('#3b82f6')
   });
 
   ngOnInit(): void {
@@ -52,7 +52,7 @@ export class MateriasListComponent {
 
   cancelarEdicao(): void {
     this.materiaEditandoId = null;
-    this.materiaForm.reset();
+    this.materiaForm.reset({titulo: '', cor: '#3b82f6'});
   }
 
   salvar(): void {
@@ -71,7 +71,7 @@ export class MateriasListComponent {
       next: (novaMateria) => {
         this.carregando = false;
         this.materias.push(novaMateria);
-        this.materiaForm.reset();
+        this.materiaForm.reset({ titulo: '', cor: '#3b82f6' });
         this.mensagemSucesso = 'Matéria adicionada com sucesso!';
       },
       error: (erro) => this.tratarErro('Erro ao adicionar matéria.', erro)
