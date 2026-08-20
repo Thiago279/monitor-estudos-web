@@ -19,7 +19,17 @@
 @if(tipoVisualizacao === 'DIARIA') {
 <div class="estatistica-diaria">
     <h3>Estatística Diária</h3>
+    <!-- Seletor de data para o dia -->
+    <div class="filtro-diario">
+        <label for="dataDiaria">Selecionar Data: </label>
+        <input 
+            id="dataDiaria" 
+            type="date" 
+            [(ngModel)]="dataDiariaSelecionada" 
+            (change)="carregarEstatisticaDiaria()">
+    </div>
     @if (estatisticaDiaria) {
+    <app-timeline-diaria [sessoes]="estatisticaDiaria.sessoes"></app-timeline-diaria>
     <p>Total de Horas Estudadas: {{ formatarDuracao(estatisticaDiaria.tempoTotalMinutos)}}</p>
     <p>Total de Sessões: {{ estatisticaDiaria.sessoes.length }}</p>
     <ul>

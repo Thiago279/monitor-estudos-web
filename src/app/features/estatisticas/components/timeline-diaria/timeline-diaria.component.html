@@ -1,0 +1,27 @@
+<div class="timeline-container">
+  @for (linha of horasDoDia; track linha.hora) {
+    <div class="linha-hora">
+      <span class="label-hora">{{ linha.hora }}</span>
+      <div class="trilho-hora">
+        <!-- Linhas de grade de fundo (guias visuais a cada 10 min) -->
+        <div class="grade-guia"></div>
+        <div class="grade-guia"></div>
+        <div class="grade-guia"></div>
+        <div class="grade-guia"></div>
+        <div class="grade-guia"></div>
+        <div class="grade-guia"></div>
+
+        <!-- Blocos de estudo pintados -->
+        @for (seg of linha.segmentos; track $index) {
+          <div 
+            class="bloco-estudo"
+            [style.left.%]="seg.leftPercentual"
+            [style.width.%]="seg.widthPercentual"
+            [style.background-color]="seg.corHex"
+            [title]="seg.tooltip">
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

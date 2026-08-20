@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { NgxEchartsDirective } from 'ngx-echarts';
-import { EChartsOption } from 'echarts';
+import { EChartsOption, SeriesOption, BarSeriesOption } from 'echarts';
 import { DiaSemanaResponse } from '../../models/estatisticas.model';
 
 @Component({
@@ -14,12 +14,16 @@ export class GraficoSemanalComponent {
   chartOptions: EChartsOption = {};
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['dias'] && this.dias.length > 0) {
+    if (changes['dias']) {
       this.atualizarGrafico();
     }
   }
 
   private atualizarGrafico(): void {
+    if (!this.dias || this.dias.length === 0) {
+      this.chartOptions = {};
+      return;
+    }
     // Mapeia os dias abreviados ou os nomes vindos da API
       const nomesAbreviados: Record<string, string> = {
         'SEGUNDA-FEIRA': 'Seg',
@@ -48,22 +52,28 @@ export class GraficoSemanalComponent {
       });
     });
 
-    // 2. Cria uma série empilhada (stack) para cada matéria
-    const seriesConfig: any[] = Array.from(mapaMaterias.entries()).map(([materiaId, info]) => {
+    const listaMaterias = Array.from(mapaMaterias.entries());
+
+    // 2. Monta as séries empilhadas com tipagem BarSeriesOption
+    const seriesConfig: BarSeriesOption[] = listaMaterias.map(([materiaId, info], seriesIndex) => {
       const temposPorDia = this.dias.map(dia => {
         const registro = dia.materias.find(m => m.materiaId === materiaId);
         const valor = registro ? registro.tempoAcumuladoMinutos : 0;
-        
+
         if (valor === 0) return 0;
 
-        // Descobre qual é a matéria mais ao topo que tem valor > 0 neste dia específico
-        const materiasDoDiaComTempo = dia.materias.filter(m => m.tempoAcumuladoMinutos > 0);
-        const ehOTopoDesteDia = materiasDoDiaComTempo[materiasDoDiaComTempo.length - 1]?.materiaId === materiaId;
+        // Descobre se esta série é a última (mais ao topo) com valor > 0 para este dia
+        const ehTopoDaPilha = !listaMaterias
+          .slice(seriesIndex + 1)
+          .some(([outroId]) => {
+            const outroReg = dia.materias.find(m => m.materiaId === outroId);
+            return outroReg && outroReg.tempoAcumuladoMinutos > 0;
+          });
 
         return {
           value: valor,
           itemStyle: {
-            borderRadius: ehOTopoDesteDia ? [6, 6, 0, 0] : [0, 0, 0, 0]
+            borderRadius: (ehTopoDaPilha ? [6, 6, 0, 0] : [0, 0, 0, 0]) as [number, number, number, number]
           }
         };
       });
@@ -72,8 +82,9 @@ export class GraficoSemanalComponent {
         name: info.titulo,
         type: 'bar',
         stack: 'total',
-        barMaxWidth: 60,
-        barCategoryGap: '2%',
+        barWidth: 72,
+        barGap: '5%',
+        barCategoryGap: '5%',
         itemStyle: {
           color: info.corHex
         },
@@ -89,12 +100,13 @@ export class GraficoSemanalComponent {
           let totalDia = 0;
 
           params.forEach((item: any) => {
-            if (item.value > 0) {
-              const h = Math.floor(item.value / 60);
-              const m = item.value % 60;
+            const valor = typeof item.value === 'object' ? item.value.value : item.value;
+            if (valor > 0) {
+              const h = Math.floor(valor / 60);
+              const m = valor % 60;
               const duracao = h > 0 ? `${h}h ${m > 0 ? m + 'min' : ''}` : `${m}min`;
               texto += `${item.marker} ${item.seriesName}: ${duracao}<br/>`;
-              totalDia += item.value;
+              totalDia += valor;
             }
           });
 
@@ -118,7 +130,7 @@ export class GraficoSemanalComponent {
       grid: {
         left: '3%',
         right: '4%',
-        bottom: '12%', // Espaço para a legenda das matérias
+        bottom: '12%',
         containLabel: true
       },
       xAxis: {
@@ -133,5 +145,4 @@ export class GraficoSemanalComponent {
       series: seriesConfig
     };
   }
-
 }

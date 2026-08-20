@@ -1,23 +1,23 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { MateriaTempoResponse } from '../../models/estatisticas.model';
-import { EChartsOption } from 'echarts';
-import { NgxEchartsModule } from 'ngx-echarts';
 import { CommonModule } from '@angular/common';
+import { NgxEchartsDirective } from 'ngx-echarts';
+import { EChartsOption, BarSeriesOption, PieSeriesOption } from 'echarts';
+import { MateriaTempoResponse } from '../../models/estatisticas.model';
 
 @Component({
   selector: 'app-grafico-periodo',
-  imports: [NgxEchartsModule, CommonModule],
+  imports: [NgxEchartsDirective, CommonModule],
   templateUrl: './grafico-periodo.component.html',
   styleUrl: './grafico-periodo.component.css'
 })
 export class GraficoPeriodoComponent implements OnChanges {
   @Input() materias: MateriaTempoResponse[] = [];
-  
+
   tipoGrafico: 'barras' | 'pizza' = 'barras';
   chartOptions: EChartsOption = {};
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['materias'] && this.materias.length > 0) {
+    if (changes['materias']) {
       this.atualizarGrafico();
     }
   }
@@ -29,6 +29,11 @@ export class GraficoPeriodoComponent implements OnChanges {
   }
 
   private atualizarGrafico(): void {
+    if (!this.materias || this.materias.length === 0) {
+      this.chartOptions = {};
+      return;
+    }
+
     if (this.tipoGrafico === 'barras') {
       this.gerarOpcoesBarras();
     } else {
@@ -37,23 +42,26 @@ export class GraficoPeriodoComponent implements OnChanges {
   }
 
   private gerarOpcoesBarras(): void {
-    // Ordena do maior para o menor tempo estudado
     const ordenadas = [...this.materias].sort(
       (a, b) => b.tempoAcumuladoMinutos - a.tempoAcumuladoMinutos
     );
 
-    // Cada matéria vira uma série independente com a sua própria cor
-    const seriesConfig: any[] = ordenadas.map(m => ({
-      name: m.materiaTitulo,
-      type: 'bar',
-      barMaxWidth: 30,
+    const titulos = ordenadas.map(m => m.materiaTitulo);
+    const seriesData = ordenadas.map(m => ({
+      value: m.tempoAcumuladoMinutos,
       itemStyle: {
-        color: m.materiaCorHex || '#42A5F5',
-        borderRadius: [0, 6, 6, 0]
-      },
-      // Array com o valor correspondente à categoria única do eixo Y
-      data: [m.tempoAcumuladoMinutos]
+        color: m.materiaCorHex,
+        borderRadius: [0, 6, 6, 0] as [number, number, number, number]
+      }
     }));
+
+    const seriesBar: BarSeriesOption = {
+      name: 'Tempo Estudado',
+      type: 'bar',
+      barMaxWidth: 48,
+      barCategoryGap: '5%',
+      data: seriesData
+    };
 
     this.chartOptions = {
       title: {
@@ -64,26 +72,18 @@ export class GraficoPeriodoComponent implements OnChanges {
         trigger: 'axis',
         axisPointer: { type: 'shadow' },
         formatter: (params: any) => {
-          let texto = '';
-          params.forEach((item: any) => {
-            if (item.value > 0) {
-              const h = Math.floor(item.value / 60);
-              const m = item.value % 60;
-              const duracao = h > 0 ? `${h}h ${m > 0 ? m + 'min' : ''}` : `${m}min`;
-              texto += `${item.marker} <strong>${item.seriesName}</strong>: ${duracao}<br/>`;
-            }
-          });
-          return texto || '<em>Nenhuma matéria visível</em>';
+          const item = params[0];
+          const minutos = Number(item.value);
+          const h = Math.floor(minutos / 60);
+          const m = minutos % 60;
+          const duracao = h > 0 ? `${h}h ${m > 0 ? m + 'min' : ''}` : `${m}min`;
+          return `<strong>${item.name}</strong><br/>Tempo: ${duracao}`;
         }
-      },
-      legend: {
-        bottom: 0,
-        type: 'scroll'
       },
       grid: {
         left: '3%',
         right: '6%',
-        bottom: '12%', // Espaço reservado para a legenda interativa
+        bottom: '3%',
         containLabel: true
       },
       xAxis: {
@@ -92,14 +92,48 @@ export class GraficoPeriodoComponent implements OnChanges {
       },
       yAxis: {
         type: 'category',
-        data: ['Matérias'], // Categoria base compartilhada
-        show: false // Oculta o label genérico 'Matérias' para focar na legenda e barras
+        data: titulos,
+        inverse: true
       },
-      series: seriesConfig
+      series: [seriesBar]
     };
   }
 
   private gerarOpcoesPizza(): void {
+    const seriesPie: PieSeriesOption = {
+      name: 'Tempo Estudado',
+      type: 'pie',
+      radius: ['45%', '70%'],
+      avoidLabelOverlap: false,
+      itemStyle: {
+        borderRadius: 6,
+        borderColor: '#fff',
+        borderWidth: 2
+      },
+      label: {
+        show: false,
+        position: 'center'
+      },
+      emphasis: {
+        label: {
+          show: true,
+          fontSize: 16,
+          fontWeight: 'bold',
+          formatter: '{b}\n{d}%'
+        },
+        itemStyle: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.3)'
+        }
+      },
+      data: this.materias.map(m => ({
+        value: m.tempoAcumuladoMinutos,
+        name: m.materiaTitulo,
+        itemStyle: { color: m.materiaCorHex }
+      }))
+    };
+
     this.chartOptions = {
       title: {
         text: 'Distribuição Percentual por Matéria',
@@ -108,7 +142,7 @@ export class GraficoPeriodoComponent implements OnChanges {
       tooltip: {
         trigger: 'item',
         formatter: (params: any) => {
-          const minutos = params.value;
+          const minutos = Number(params.value);
           const h = Math.floor(minutos / 60);
           const m = minutos % 60;
           const duracao = h > 0 ? `${h}h ${m > 0 ? m + 'min' : ''}` : `${m}min`;
@@ -119,25 +153,7 @@ export class GraficoPeriodoComponent implements OnChanges {
         bottom: 0,
         type: 'scroll'
       },
-      series: [
-        {
-          name: 'Tempo Estudado',
-          type: 'pie',
-          radius: '55%',
-          data: this.materias.map(m => ({
-            value: m.tempoAcumuladoMinutos,
-            name: m.materiaTitulo,
-            itemStyle: { color: m.materiaCorHex || '#42A5F5' }
-          })),
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
-            }
-          }
-        }
-      ]
+      series: [seriesPie]
     };
   }
 }

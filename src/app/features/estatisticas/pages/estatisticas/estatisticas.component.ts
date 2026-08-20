@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 import { EstatisticaService } from '../../services/estatisticas.service';
-import { EstatisticaDiariaResponse, EstatisticaSemanalResponse, EstatisticaPeriodoResponse } from '../../models/estatisticas.model';
+import { EstatisticaDiariaResponse, EstatisticaSemanalResponse, EstatisticaPeriodoResponse} from '../../models/estatisticas.model';
 import { GraficoSemanalComponent } from '../../components/grafico-semanal/grafico-semanal.component';
+import { TimelineDiariaComponent } from '../../components/timeline-diaria/timeline-diaria.component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { GraficoPeriodoComponent } from '../../components/grafico-periodo/grafico-periodo.component';
 
 @Component({
   selector: 'app-estatisticas',
-  imports: [FormsModule, CommonModule, GraficoSemanalComponent, GraficoPeriodoComponent],
+  imports: [FormsModule, CommonModule, GraficoSemanalComponent, GraficoPeriodoComponent, TimelineDiariaComponent],
   templateUrl: './estatisticas.component.html',
   styleUrl: './estatisticas.component.css'
 })
@@ -28,6 +29,8 @@ export class EstatisticasComponent {
 
   tipoVisualizacao: 'DIARIA' | 'SEMANAL' | 'PERIODO' = 'DIARIA';
 
+  dataDiariaSelecionada: string = '';
+
   mensagemErro: string | null = null;
 
   
@@ -38,7 +41,7 @@ export class EstatisticasComponent {
   carregarEstatisticaDiaria(): void {
     this.iniciarRequisicao();
 
-    this.estatisticaService.obterEstatisticaDiaria().subscribe({
+    this.estatisticaService.obterEstatisticaDiaria(this.dataDiariaSelecionada || undefined).subscribe({
       next: (dados) => {
         this.carregando = false;
         this.estatisticaDiaria = dados;

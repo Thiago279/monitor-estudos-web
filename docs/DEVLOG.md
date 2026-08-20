@@ -95,3 +95,40 @@ src/app/
 
 - Encountered CORS policy block from backend until CORS headers were properly set on Spring Boot controllers.
 - Addressed asynchronous race condition during initial state load by coupling active session check (`.find()`) strictly within the `SessaoEstudoService` subscription callback.
+
+
+## Semana 03
+
+## DONE
+- Integrated Apache ECharts into the Angular application using `ngx-echarts` and configured provider bindings in `app.config.ts`.
+- Built dumb component `GraficoSemanalComponent` using `@Input()` property binding and `ngOnChanges` lifecycle hook for reactive data synchronization.
+- Implemented stacked bar chart (`type: 'bar'`, `stack: 'total'`) displaying daily study time distributions segmented by subject color.
+- Integrated HTML5 native `<input type="color">` color picker into `Materia` reactive form to streamline hex code selection.
+- Built `GraficoPeriodoComponent` featuring dynamic view toggling between horizontal ranking bar charts and pie distribution charts.
+- Implemented interactive legend filtering supporting show/hide toggles per subject across all chart views.
+- Added custom tooltips formatting raw minutes into human-readable duration strings (`Xh Ymin` and percentage distribution).
+
+## Notes
+- Configured `ngx-echarts` provider with modular Apache ECharts core packaging to optimize frontend bundle size.
+- Structured chart components as reusable child components decoupled from parent container state and HTTP services.
+- Implemented `ngOnChanges` change detection handling `SimpleChanges` to recompute chart options upon data updates.
+- Transformed weekly statistics dataset (`DiaSemanaResponse[]`) by mapping unique subjects to distinct chart series sharing a common stack identifier (`stack: 'total'`).
+- Formatted category axis labels using day abbreviations (`Seg`, `Ter`, `Qua`, etc.) and set `axisLabel.interval = 0` to prevent label truncation.
+- Aligned reactive form control naming (`corHex`) with backend model properties to maintain consistency between `<input type="color">` and Spring Boot DTOs.
+- Implemented view switching logic (`tipoGrafico: 'barras' | 'pizza'`) dynamically modifying `EChartsOption` configuration objects in local component state.
+- Configured individual bar series for horizontal ranking charts to leverage ECharts native legend toggle capabilities.
+
+## Problems
+
+- Resolved uneven stacked bar corner radius artifacts by calculating dynamic `borderRadius` styles based on daily layer positions.
+- Fixed form synchronization failure in subject editing by aligning template `formControlName="corHex"` with TypeScript `FormGroup` control definitions.
+
+
+next
+- criar delete sessao no frontend
+- paginacao de sessoes bakcned
+- grafico diario
+- componente grafico diario home
+- padronizacao e estilizacao global
+- dark / light mode
+
