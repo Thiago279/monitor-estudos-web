@@ -9,10 +9,11 @@ import { SessaoEstudoService } from '../../../sessoes/services/sessao.service';
 import { SessaoEstudoRequest } from '../../../sessoes/models/sessao.model';
 import { EstatisticaService } from '../../../estatisticas/services/estatisticas.service';
 import { EstatisticaDiariaResponse } from '../../../estatisticas/models/estatisticas.model';
+import { TimelineDiariaComponent } from '../../../estatisticas/components/timeline-diaria/timeline-diaria.component';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, DatePipe, ReactiveFormsModule],
+  imports: [CommonModule, DatePipe, ReactiveFormsModule, TimelineDiariaComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -83,6 +84,7 @@ export class HomeComponent {
           this.emAndamento = sessaoCriada;
           this.iniciarTimer(sessaoCriada.dataInicio);
           this.mensagemSucesso = 'Sessão iniciada com sucesso!';
+          this.carregarEstatisticaDiaria();
         },
         error: (erro) => this.tratarErro('Erro ao iniciar sessão.', erro)
       });

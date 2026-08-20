@@ -89,18 +89,9 @@
     <div class="painel-intervalos">
       <h4>Intervalos Registrados</h4>
       
-      @for (sessao of estatisticaDiaria?.sessoes; track sessao.sessaoId) {
-        <div class="item-intervalo">
-          <span class="intervalo-horario">
-            {{ sessao.horaInicio }} ➔ {{ sessao.horaFim || 'Em andamento' }}
-          </span>
-          <span class="intervalo-materia" [style.color]="sessao.materiaCorHex">
-            {{ sessao.materiaTitulo }} ({{ sessao.duracaoMinutos }}m)
-          </span>
-        </div>
-      } @empty {
-        <p class="sem-sessoes">Sem blocos de horários hoje.</p>
-      }
+      @if (estatisticaDiaria) {
+        <app-timeline-diaria [sessoes]="estatisticaDiaria.sessoes"></app-timeline-diaria>
+    }
     </div>
 
   </div>
