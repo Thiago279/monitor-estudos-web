@@ -90,6 +90,27 @@ export class SessoesComponent implements OnInit {
       error: (erro) => this.tratarErro('Erro ao registrar sessão antiga.', erro)
     });
   }
+
+  excluirSessao(id: number): void {
+    const confirmou = window.confirm('Deseja realmente excluir esta sessão de estudo?');
+    if (!confirmou) return;
+
+    this.iniciarRequisicao();
+
+    this.sessaoEstudoService.deletarSessao(id).subscribe({
+      next: () => {
+        this.carregando = false;
+        this.sessoes = this.sessoes.filter(sessao => sessao.id !== id);
+
+        if (this.emAndamento?.id === id) {
+          this.emAndamento = null;
+        }
+
+        this.mensagemSucesso = 'Sessão excluída com sucesso!';
+      },
+      error: (erro) => this.tratarErro('Não foi possível excluir a sessão.', erro)
+    });
+  }
   
   // 2. Métodos Utilitários de Estado (Iguais aos de MateriasListComponent!)
   private iniciarRequisicao(): void {

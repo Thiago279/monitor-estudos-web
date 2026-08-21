@@ -97,3 +97,29 @@
   color: #004085;
   font-style: italic;
 }
+
+.card-acoes {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-deletar {
+  background: transparent;
+  border: 1px solid #ffcdd2;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 6px 10px;
+  font-size: 14px;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.btn-deletar:hover {
+  background-color: #ffebee;
+  border-color: #e57373;
+}
+
+.btn-deletar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

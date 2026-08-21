@@ -12,7 +12,7 @@
 .linha-hora {
     display: flex;
     align-items: center;
-    height: 32px;
+    height: 28px;
     border-bottom: 1px solid #f0f0f0;
 }
 
@@ -27,7 +27,7 @@
 .trilho-hora {
     position: relative;
     flex: 1;
-    height: 26px;
+    height: 24px;
     background-color: #fafafa;
     border-radius: 3px;
     display: flex;

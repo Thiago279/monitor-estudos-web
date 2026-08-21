@@ -26,4 +26,9 @@ export class SessaoEstudoService {
   finalizarSessao(id: number): Observable<SessaoEstudoResponse> {
     return this.http.patch<SessaoEstudoResponse>(`${this.apiUrl}/${id}/finalizar`, null);
   }
+
+  deletarSessao(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
 }

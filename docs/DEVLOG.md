@@ -107,6 +107,11 @@ src/app/
 - Built `GraficoPeriodoComponent` featuring dynamic view toggling between horizontal ranking bar charts and pie distribution charts.
 - Implemented interactive legend filtering supporting show/hide toggles per subject across all chart views.
 - Added custom tooltips formatting raw minutes into human-readable duration strings (`Xh Ymin` and percentage distribution).
+- Developed `TimelineDiariaComponent` featuring a 24-hour visual grid (00h to 23h) with segmented horizontal blocks positioned via CSS percentage math (`left`, `width`).
+- Added dynamic date picker filter to the daily statistics view with automatic HTTP query parameter synchronization (`?data=YYYY-MM-DD`).
+- Integrated the daily timeline component directly into the `HomeComponent` dashboard sidebar, auto-refreshing on session start and completion.
+- Refactored backend `EstatisticasService` to apply day-boundary clipping (`00:00:00` to `23:59:59`) for cross-midnight study sessions.
+- Updated `SessaoEstudoRepository` query to detect overlapping and ongoing intervals across multiple calendar days (`findSessoesNoIntervalo`).
 
 ## Notes
 - Configured `ngx-echarts` provider with modular Apache ECharts core packaging to optimize frontend bundle size.
@@ -117,18 +122,18 @@ src/app/
 - Aligned reactive form control naming (`corHex`) with backend model properties to maintain consistency between `<input type="color">` and Spring Boot DTOs.
 - Implemented view switching logic (`tipoGrafico: 'barras' | 'pizza'`) dynamically modifying `EChartsOption` configuration objects in local component state.
 - Configured individual bar series for horizontal ranking charts to leverage ECharts native legend toggle capabilities.
+- Implemented time string to minutes parser (`HH:mm:ss` -> `totalMinutes`) to compute precise percentage offsets for timeline rendering.
+- Enforced strict repository filtering using `s.dataInicio <= :fim AND (s.dataFim IS NULL OR s.dataFim >= :inicio)` to capture active sessions spanning multiple days.
+- Implemented session deletion in sessions list.
 
 ## Problems
-
 - Resolved uneven stacked bar corner radius artifacts by calculating dynamic `borderRadius` styles based on daily layer positions.
 - Fixed form synchronization failure in subject editing by aligning template `formControlName="corHex"` with TypeScript `FormGroup` control definitions.
+- Fixed day-boundary overflow bug where sessions running across midnight caused negative timeline offsets and distorted single-day aggregates by clipping start/end bounds to `data.atStartOfDay()` and `data.atTime(LocalTime.MAX)`.
+- Resolved missing ongoing session data on subsequent calendar days by replacing `findByDataInicioBetween` with an interval overlap JPA query (`findSessoesNoIntervalo`).
 
+## NEXT
 
-next
-- criar delete sessao no frontend
-- paginacao de sessoes bakcned
-- grafico diario
-- componente grafico diario home
-- padronizacao e estilizacao global
-- dark / light mode
-
+- Implementar paginação de sessões no backend e no frontend
+- Padronização e estilização global (CSS/Design System)
+- Suporte a Dark / Light mode

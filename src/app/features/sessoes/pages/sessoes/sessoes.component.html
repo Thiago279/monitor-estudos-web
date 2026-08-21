@@ -81,6 +81,18 @@
             <span class="badge badge-andamento">Em Andamento</span>
           }
         </div>
+        <div class="card-acoes">
+            <button 
+          type="button" 
+          class="btn-deletar" 
+          (click)="excluirSessao(sessao.id)" 
+          [disabled]="carregando"
+          title="Excluir sessão">
+          🗑️
+        </button>
+
+        </div>
+        
       </div>
     }
   </div>
